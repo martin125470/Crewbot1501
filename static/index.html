@@ -515,7 +515,20 @@ function logout() {
   _chatHistory = [];
   document.getElementById('app').style.display = 'none';
   document.getElementById('login-screen').style.display = 'flex';
-  document.getElementById('chat-body').innerHTML = document.getElementById('chat-body').innerHTML; // reset
+  // Reset chat state
+  _chatHistory = [];
+  const chatBody = document.getElementById('chat-body');
+  chatBody.innerHTML = `<div class="chat-empty" id="chat-empty">
+    <svg width="56" height="56" fill="none" viewBox="0 0 24 24"><path stroke="#9ca3af" stroke-width="1.5" d="M8 10h.01M12 10h.01M16 10h.01M21 12c0 4.418-4.03 8-9 8a9.9 9.9 0 0 1-4-.83L3 20l1.16-3.65C3.43 15.1 3 13.6 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8Z"/></svg>
+    <h3>Ask anything about your equipment</h3>
+    <p>Try mentioning a unit number or part name to get started.</p>
+    <div class="chat-suggestions">
+      <div class="suggestion-chip" onclick="sendSuggestion('What manuals are available?')">What manuals are available?</div>
+      <div class="suggestion-chip" onclick="sendSuggestion('Show specs for unit 101')">Show specs for unit 101</div>
+      <div class="suggestion-chip" onclick="sendSuggestion('What hoses do I need for unit 102?')">Hoses for unit 102</div>
+      <div class="suggestion-chip" onclick="sendSuggestion('Compare oil specs across all units')">Compare oil specs</div>
+    </div>
+  </div>`;
 }
 
 // Auto-login if token exists

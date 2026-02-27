@@ -12,7 +12,7 @@ Strategy
 
 import os
 import re
-from typing import List, Tuple
+from typing import List, Optional, Tuple
 
 from openai import OpenAI
 
@@ -20,7 +20,7 @@ from app.services import vector_service
 from app.models.schemas import ChatMessage, SourceChunk
 
 _CHAT_MODEL = os.getenv("CHAT_MODEL", "gpt-4o-mini")
-_client: OpenAI | None = None
+_client: Optional[OpenAI] = None
 
 
 def _get_openai() -> OpenAI:

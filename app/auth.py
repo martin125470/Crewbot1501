@@ -6,6 +6,7 @@ An admin user is created automatically on first startup.
 import json
 import os
 from datetime import datetime, timedelta, timezone
+from pathlib import Path
 from typing import Optional
 
 from jose import JWTError, jwt
@@ -15,7 +16,13 @@ from fastapi.security import OAuth2PasswordBearer
 
 from app.models.schemas import TokenData
 
-SECRET_KEY = os.getenv("SECRET_KEY", "change-me-to-a-long-random-secret")
+_raw_secret = os.getenv("SECRET_KEY", "")
+if not _raw_secret:
+    raise RuntimeError(
+        "SECRET_KEY environment variable is not set. "
+        "Set it to a long random string before starting the server."
+    )
+SECRET_KEY = _raw_secret
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 60 * 8   # 8 hours
 
@@ -23,18 +30,18 @@ _pwd_ctx = CryptContext(schemes=["bcrypt"], deprecated="auto")
 _oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/auth/token")
 
 # Where users are persisted between restarts
-_USERS_FILE = os.path.join(os.path.dirname(__file__), "..", "..", "data", "users.json")
+_USERS_FILE = Path(__file__).parent.parent / "data" / "users.json"
 
 
 def _load_users() -> dict:
-    if os.path.exists(_USERS_FILE):
+    if _USERS_FILE.exists():
         with open(_USERS_FILE) as f:
             return json.load(f)
     return {}
 
 
 def _save_users(users: dict) -> None:
-    os.makedirs(os.path.dirname(_USERS_FILE), exist_ok=True)
+    _USERS_FILE.parent.mkdir(parents=True, exist_ok=True)
     with open(_USERS_FILE, "w") as f:
         json.dump(users, f, indent=2)
 
