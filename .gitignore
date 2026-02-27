@@ -1,0 +1,27 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.egg-info/
+dist/
+build/
+.venv/
+venv/
+env/
+
+# Environment
+.env
+
+# Data (user data, not committed)
+data/pdfs/*.pdf
+data/chroma/
+data/users.json
+
+# Keep the data directories
+!data/pdfs/.gitkeep
+!data/.gitkeep
+
+# IDE
+.vscode/
+.idea/
+*.swp
